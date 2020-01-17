@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Route
+metadata:
+  name: registry.apps.openshift.deustotech.eu
+  # annotations:
+  #   kubernetes.io/tls-acme: 'true'
+spec:
+  host: registry.apps.openshift.deustotech.eu
+  to:
+    kind: Service
+    name: docker-registry
+  port:
+    targetPort: 5000
+  tls:
+    termination: passthrough

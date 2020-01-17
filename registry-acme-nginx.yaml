@@ -1,0 +1,43 @@
+kind: "DeploymentConfig"
+apiVersion: "v1"
+metadata:
+  name: "acme-nginx"
+spec:
+  template: 
+    metadata:
+      labels:
+        name: "acme-nginx"
+    spec:
+      containers:
+        - name: "acme-nginx"
+          image: "docker-registry.default.svc:5000/default/acme-nginx"
+          ports:
+            - containerPort: 8443
+              protocol: "TCP"
+          volumeMounts:
+            - mountPath: /opt/app-root/src
+              name: certs
+              subPath: nginx-root
+            - mountPath: /certs
+              name: certs
+              subPath: certs
+      volumes:
+        - name: certs
+          persistentVolumeClaim:
+            claimName: certs
+  replicas: 1
+  triggers:
+    - type: "ConfigChange" 
+    - type: "ImageChange" 
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - "acme-nginx"
+        from:
+          kind: "ImageStreamTag"
+          name: "acme-nginx:latest"
+  strategy: 
+    type: "Rolling"
+  paused: false 
+  revisionHistoryLimit: 2 
+  minReadySeconds: 0
