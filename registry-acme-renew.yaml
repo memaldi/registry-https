@@ -15,19 +15,19 @@ spec:
                 containers:
                 - name: acme-renew
                   image: memaldi/openshift-acme
-                  args: ["--renew",  "-d", "myapp.example.com", "--webroot", "/nginx-root", "--config-home", "/config", "--key-file", "/certs/server.key", "--fullchain-file", "/certs/server.crt", "--debug", "--force"]
+                  args: ["--renew",  "-d", "docker-registry-default.apps.openshift.deustotech.eu", "--webroot", "/nginx-root", "--config-home", "/config", "--key-file", "/certs/registry.key", "--fullchain-file", "/certs/registry.crt", "--debug"]
                 volumeMounts:
                     - mountPath: /nginx-root
-                      name: dbpedia-pvc
+                      name: certs
                       subPath: nginx-root
                     - mountPath: /certs
-                      name: dbpedia-pvc
+                      name: certs
                       subPath: certs
                     - mountPath: /config
-                      name: dbpedia-pvc
+                      name: certs
                       subPath: acme-config
                 volumes:
-                - name: dbpedia-pvc
-                persistentVolumeClaim:
-                    claimName: dbpedia-pvc
+                - name: certs
+                  persistentVolumeClaim:
+                    claimName: certs
                 restartPolicy: OnFailure
