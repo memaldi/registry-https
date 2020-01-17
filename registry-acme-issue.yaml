@@ -12,19 +12,19 @@ spec:
         containers:
         - name: acme-issue
           image: memaldi/openshift-acme
-          args: ["--issue",  "-d", "registry.apps.openshift.deustotech.eu", "--webroot", "/nginx-root", "--config-home", "/config", "--key-file", "/etc/secrets/registry.key", "--fullchain-file", "/etc/secrets/registry.crt", "--debug", "--staging", "--force"]
+          args: ["--issue",  "-d", "docker-registry-default.apps.openshift.deustotech.eu", "--webroot", "/nginx-root", "--config-home", "/config", "--key-file", "/certs/registry.key", "--fullchain-file", "/certs/registry.crt", "--debug", "--force"]
           volumeMounts:
             - mountPath: /nginx-root
-              name: dbpedia-pvc
+              name: certs
               subPath: nginx-root
             - mountPath: /certs
-              name: dbpedia-pvc
+              name: certs
               subPath: certs
             - mountPath: /config
-              name: dbpedia-pvc
+              name: certs
               subPath: acme-config
         volumes:
-        - name: dbpedia-pvc
+        - name: certs
           persistentVolumeClaim:
-            claimName: dbpedia-pvc
+            claimName: certs
         restartPolicy: OnFailure
