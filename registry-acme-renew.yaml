@@ -10,22 +10,23 @@ spec:
     spec:
         template:
             metadata:
-                name: acme-renew
+                labels:
+                  parent: "acme-renew-cronjob"
             spec:
                 containers:
                 - name: acme-renew
                   image: memaldi/openshift-acme
                   args: ["--renew",  "-d", "docker-registry-default.apps.openshift.deustotech.eu", "--webroot", "/nginx-root", "--config-home", "/config", "--key-file", "/certs/registry.key", "--fullchain-file", "/certs/registry.crt", "--debug"]
-                volumeMounts:
-                    - mountPath: /nginx-root
-                      name: certs
-                      subPath: nginx-root
-                    - mountPath: /certs
-                      name: certs
-                      subPath: certs
-                    - mountPath: /config
-                      name: certs
-                      subPath: acme-config
+                  volumeMounts:
+                      - mountPath: /nginx-root
+                        name: certs
+                        subPath: nginx-root
+                      - mountPath: /certs
+                        name: certs
+                        subPath: certs
+                      - mountPath: /config
+                        name: certs
+                        subPath: acme-config
                 volumes:
                 - name: certs
                   persistentVolumeClaim:
